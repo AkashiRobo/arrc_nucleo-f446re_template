@@ -86,11 +86,11 @@ int ScrpSlave::sending(int port,uint8_t id,uint8_t cmd,int16_t tx_data){
 
     const uint8_t data[] = {DMY, STX, id, cmd, tx_dataL, tx_dataH, tx_sum};
     if(!serial[port]->writeable())return -1;
-    if(mode%2 == 1 && id == 0)rede->write(1);
+    if(mode%2 == 1 && port == 0)rede->write(1);
     for(int i = 0;i<7;i++){
         serial[port]->putc(data[i]);
     }
-    if(mode%2 == 1 && id == 0)rede->write(0);
+    if(mode%2 == 1 && port == 0)rede->write(0);
             
     int i = 0;
     bool received = false;

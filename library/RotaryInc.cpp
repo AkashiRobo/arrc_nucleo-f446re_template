@@ -16,6 +16,7 @@ void RotaryInc::init(PinName pinA,PinName pinB){
     A = new InterruptIn(pinA,PullUp);
     B = new InterruptIn(pinB,PullUp);
     A->rise(callback(this,&RotaryInc::riseA));
+    pulse = 0;
         
     if(mode == 2){
         A->fall(callback(this,&RotaryInc::fallA));
