@@ -84,12 +84,13 @@ int ScrpSlave::sending(int port,uint8_t id,uint8_t cmd,int16_t tx_data){
     uint8_t tx_dataH = tx_data >> 8;
     uint8_t tx_sum = id + cmd + tx_dataL + tx_dataH;
 
-    const uint8_t data[] = {DMY, STX, id, cmd, tx_dataL, tx_dataH, tx_sum};
+    const uint8_t data[] = {DMY, STX, id, cmd, tx_dataL, tx_dataH, tx_sum, DMY};
     if(!serial[port]->writeable())return -1;
     if(mode%2 == 1 && port == 0)rede->write(1);
-    for(int i = 0;i<7;i++){
+    for(int i = 0;i<8;i++){
         serial[port]->putc(data[i]);
     }
+    while(!serial[port]->writeable());
     if(mode%2 == 1 && port == 0)rede->write(0);
             
     int i = 0;
@@ -168,12 +169,13 @@ void ScrpSlave::check(int port){
     uint8_t tx_dataH = tx_data >> 8;
     uint8_t tx_sum = my_id + rx_cmd + tx_dataL + tx_dataH;
     
-    const uint8_t data[] = {DMY, STX, my_id, rx_cmd, tx_dataL, tx_dataH, tx_sum};
+    const uint8_t data[] = {DMY, STX, my_id, rx_cmd, tx_dataL, tx_dataH, tx_sum, DMY};
     if(!serial[port]->writeable())return;
     if(mode%2 == 1 && port == 0)rede->write(1);
-    for(int i = 0;i<7;i++){
+    for(int i = 0;i<8;i++){
         serial[port]->putc(data[i]);
     }
+    while(!serial[port]->writeable());
     if(mode%2 == 1 && port == 0)rede->write(0);    
     return;
 }
